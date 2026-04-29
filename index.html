@@ -188,6 +188,9 @@
       #nav .nav-toggle span { background: var(--cream); }
       #nav.scrolled .nav-toggle span { background: var(--charcoal); }
       .nav-toggle.open span { background: var(--cream) !important; }
+      /* backdrop-filter on #nav creates a containing block that breaks
+         position:fixed on .nav-links — disable it on mobile */
+      #nav.scrolled { backdrop-filter: none; }
     }
 
     /* ══════════════════════════
