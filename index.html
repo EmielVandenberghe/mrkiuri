@@ -180,13 +180,14 @@
         align-items: center;
         justify-content: center;
         gap: 2.8rem;
-        z-index: 99;
+        z-index: 200;
       }
       .nav-links.open { display: flex; }
       .nav-links a { font-size: 1rem; color: var(--cream) !important; }
-      .nav-toggle { display: flex; z-index: 101; }
+      .nav-toggle { display: flex; z-index: 201; }
       #nav .nav-toggle span { background: var(--cream); }
       #nav.scrolled .nav-toggle span { background: var(--charcoal); }
+      .nav-toggle.open span { background: var(--cream) !important; }
     }
 
     /* ══════════════════════════
