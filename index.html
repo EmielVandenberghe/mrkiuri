@@ -1623,7 +1623,7 @@
           <textarea id="message" name="message" rows="5" placeholder="Fecha, hora, número de personas…" required></textarea>
         </div>
         <p class="form-note">Respondemos dentro de 24 horas.</p>
-        <button type="submit" class="btn-submit" id="submit-btn">Enviar mensaje</button>
+        <button type="submit" class="btn-submit" id="submit-btn">Enviar por WhatsApp</button>
       </form>
     </div>
   </section>
@@ -1752,50 +1752,24 @@
       frame();
     })();
 
-    // ── Form submit ──
-    // Sign up free at https://formspree.io, create a form, and replace YOUR_FORM_ID below.
-    const FORMSPREE_ID = 'YOUR_FORM_ID';
-
-    async function handleForm(e) {
+    // ── Form submit → WhatsApp ──
+    function handleForm(e) {
       e.preventDefault();
       const form = e.target;
-      const btn = document.getElementById('submit-btn');
+      const name    = form.name.value.trim();
+      const email   = form.email.value.trim();
+      const phone   = form.phone.value.trim();
+      const message = form.message.value.trim();
 
-      btn.textContent = 'Enviando…';
-      btn.disabled = true;
+      let text = `Hola Mr. Kiuri! 👋\n\n`;
+      text += `*Nombre:* ${name}\n`;
+      text += `*Correo:* ${email}\n`;
+      if (phone) text += `*Teléfono:* ${phone}\n`;
+      text += `\n*Mensaje:*\n${message}`;
 
-      try {
-        const res = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
-          method: 'POST',
-          headers: { 'Accept': 'application/json' },
-          body: new FormData(form)
-        });
-
-        if (res.ok) {
-          btn.textContent = 'Mensaje enviado ✓';
-          btn.style.borderColor = 'var(--sage)';
-          btn.style.color = 'var(--sage)';
-          form.reset();
-          setTimeout(() => {
-            btn.textContent = 'Enviar mensaje';
-            btn.disabled = false;
-            btn.style.borderColor = '';
-            btn.style.color = '';
-          }, 3500);
-        } else {
-          throw new Error('server error');
-        }
-      } catch {
-        btn.textContent = 'Error — intenta de nuevo';
-        btn.style.borderColor = 'var(--red)';
-        btn.style.color = 'var(--red)';
-        setTimeout(() => {
-          btn.textContent = 'Enviar mensaje';
-          btn.disabled = false;
-          btn.style.borderColor = '';
-          btn.style.color = '';
-        }, 3500);
-      }
+      const url = `https://wa.me/51958498120?text=${encodeURIComponent(text)}`;
+      window.open(url, '_blank');
+      form.reset();
     }
   </script>
 </body>
