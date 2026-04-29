@@ -1,0 +1,1773 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mr. Kiuri — Cocina Nikkei · Cusco</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --cream:   #F5F0E8;
+      --charcoal:#1A1A1A;
+      --red:     #C0392B;
+      --sage:    #7A9E7E;
+      --mid:     #6B6B6B;
+      --line:    rgba(26,26,26,0.15);
+    }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      background: var(--cream);
+      color: var(--charcoal);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 300;
+      line-height: 1.8;
+      overflow-x: hidden;
+    }
+    img { display: block; max-width: 100%; }
+    a { color: inherit; text-decoration: none; }
+    button, input, textarea { font-family: inherit; }
+
+    /* ── Typography ── */
+    .serif { font-family: 'Cormorant Garamond', serif; }
+    h1,h2,h3 { font-family: 'Cormorant Garamond', serif; font-weight: 300; letter-spacing: 0.04em; }
+    h2 { font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1.2; }
+    h3 { font-size: clamp(1.1rem, 2.5vw, 1.5rem); }
+
+    /* ── Section Label ── */
+    .section-label {
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 0.6rem;
+      font-weight: 500;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: var(--red);
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      margin-bottom: 1rem;
+    }
+    .section-label::before {
+      content: '';
+      display: inline-block;
+      width: 16px;
+      height: 1px;
+      background: currentColor;
+      flex-shrink: 0;
+    }
+
+    /* ── Divider ── */
+    .rule {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      margin: 2rem 0;
+    }
+    .rule::before {
+      content: '';
+      width: 48px;
+      height: 1px;
+      background: var(--red);
+      flex-shrink: 0;
+    }
+    .rule::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--line);
+    }
+    .rule .dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--charcoal);
+      outline: 1px solid var(--line);
+      outline-offset: 2px;
+      flex-shrink: 0;
+    }
+
+    /* ── Entrance Animation ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity 0.42s ease, transform 0.42s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.06s; }
+    .reveal-delay-2 { transition-delay: 0.12s; }
+    .reveal-delay-3 { transition-delay: 0.18s; }
+    .reveal-delay-4 { transition-delay: 0.24s; }
+    .reveal-delay-5 { transition-delay: 0.30s; }
+
+    /* ══════════════════════════
+       NAV
+    ══════════════════════════ */
+    #nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1.4rem 2.4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background 0.4s ease, box-shadow 0.4s ease, padding 0.4s ease;
+    }
+    #nav.scrolled {
+      background: rgba(248,244,236,0.97);
+      box-shadow: 0 1px 0 rgba(26,26,26,0.1);
+      padding: 0.8rem 2.4rem;
+      backdrop-filter: blur(8px);
+    }
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.25rem;
+      font-weight: 400;
+      font-style: italic;
+      letter-spacing: 0.06em;
+      color: var(--cream);
+      transition: color 0.4s;
+    }
+    #nav.scrolled .nav-logo { color: var(--charcoal); }
+    .nav-links {
+      display: flex;
+      gap: 2.2rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.7rem;
+      font-weight: 400;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(245,240,232,0.85);
+      transition: color 0.3s;
+    }
+    #nav.scrolled .nav-links a { color: var(--charcoal); }
+    .nav-links a:hover { color: var(--red); }
+
+    /* hamburger */
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+    .nav-toggle span {
+      display: block;
+      width: 24px; height: 1px;
+      background: var(--cream);
+      transition: background 0.4s, transform 0.3s;
+    }
+    #nav.scrolled .nav-toggle span { background: var(--charcoal); }
+    .nav-toggle.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+    .nav-toggle.open span:nth-child(2) { opacity: 0; }
+    .nav-toggle.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+    @media (max-width: 680px) {
+      .nav-links {
+        display: none;
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: var(--charcoal);
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 2.8rem;
+        z-index: 99;
+      }
+      .nav-links.open { display: flex; }
+      .nav-links a { font-size: 1rem; color: var(--cream) !important; }
+      .nav-toggle { display: flex; z-index: 101; }
+      #nav.scrolled .nav-toggle span { background: var(--charcoal); }
+      #nav .nav-toggle span { background: var(--cream); }
+    }
+
+    /* ══════════════════════════
+       HERO
+    ══════════════════════════ */
+    #hero {
+      position: relative;
+      height: 100dvh;
+      min-height: 600px;
+      background: #111009 url('background_home.jpeg') center 55%/cover no-repeat;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    #hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at center, rgba(17,16,9,0.65) 0%, rgba(17,16,9,0.4) 60%, rgba(17,16,9,0.7) 100%),
+        linear-gradient(to bottom, rgba(17,16,9,0.5) 0%, rgba(17,16,9,0.35) 40%, rgba(17,16,9,0.75) 100%);
+      backdrop-filter: saturate(1.15) contrast(1.05);
+      -webkit-backdrop-filter: saturate(1.15) contrast(1.05);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* Canvas for ink/blossom */
+    #hero-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      opacity: 0.55;
+    }
+
+    /* Thin decorative lines */
+    .hero-line-left, .hero-line-right {
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 1px;
+      background: rgba(245,240,232,0.12);
+    }
+    .hero-line-left  { left: 10%; }
+    .hero-line-right { right: 10%; }
+    .hero-line-h {
+      position: absolute;
+      left: 0; right: 0;
+      height: 1px;
+      background: rgba(245,240,232,0.08);
+    }
+    .hero-line-h.top    { top: 18%; }
+    .hero-line-h.bottom { bottom: 18%; }
+
+    /* Corner kanji-like marks */
+    .hero-mark {
+      position: absolute;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.25em;
+      color: rgba(245,240,232,0.25);
+      text-transform: uppercase;
+    }
+    .hero-mark.tl { top: 2.2rem; left: 2.4rem; }
+    .hero-mark.tr { top: 2.2rem; right: 2.4rem; text-align: right; }
+    .hero-mark.bl { bottom: 2.2rem; left: 2.4rem; }
+    .hero-mark.br { bottom: 2.2rem; right: 2.4rem; text-align: right; }
+
+    .hero-center {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+      text-align: center;
+      padding: 0 2rem;
+    }
+
+    /* Logo circle */
+    .logo-ring {
+      position: relative;
+      width: clamp(170px, 28vw, 230px);
+      height: clamp(170px, 28vw, 230px);
+      animation: float 7s ease-in-out infinite;
+    }
+    .logo-ring::before {
+      content: '';
+      position: absolute;
+      inset: -10px;
+      border-radius: 50%;
+      border: 1px solid rgba(245,240,232,0.12);
+    }
+    .logo-ring::after {
+      content: '';
+      position: absolute;
+      inset: -20px;
+      border-radius: 50%;
+      border: 1px solid rgba(245,240,232,0.05);
+    }
+    .logo-circle {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: #F8F4EC;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.25rem;
+      box-shadow: 0 20px 70px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.06);
+      padding: 1.8rem;
+      position: relative;
+    }
+    @keyframes float {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(-10px); }
+    }
+    .logo-script {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.6rem, 4vw, 2.2rem);
+      font-weight: 400;
+      font-style: italic;
+      color: #1A1A1A;
+      line-height: 1;
+      letter-spacing: -0.01em;
+    }
+    .logo-dot-row {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin: 0.15rem 0;
+    }
+    .logo-dot-row .ld { width: 4px; height: 4px; border-radius: 50%; background: var(--red); }
+    .logo-dot-row .ll { width: 22px; height: 1px; background: rgba(26,26,26,0.18); }
+    .logo-sub {
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 0.48rem;
+      font-weight: 500;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: #888;
+    }
+    .logo-chopsticks {
+      font-size: 0.9rem;
+      color: var(--red);
+      letter-spacing: -0.1em;
+      margin-top: 0.1rem;
+    }
+
+    .hero-headline {
+      text-align: center;
+    }
+    .hero-tagline {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.05rem, 2.8vw, 1.5rem);
+      font-weight: 300;
+      font-style: italic;
+      color: rgba(245,240,232,0.55);
+      letter-spacing: 0.08em;
+      line-height: 1.5;
+    }
+    .hero-tagline em {
+      color: rgba(245,240,232,0.85);
+      font-style: normal;
+    }
+    .hero-sub-label {
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 0.58rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: rgba(245,240,232,0.3);
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem 3rem;
+      min-width: 220px;
+      border: 1px solid rgba(245,240,232,0.28);
+      color: rgba(245,240,232,0.92);
+      font-size: 0.65rem;
+      font-weight: 400;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      text-align: center;
+      transition: background 0.25s, border-color 0.25s, color 0.25s;
+      cursor: pointer;
+      background: rgba(20,16,10,0.35);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+    }
+    .btn-primary:hover {
+      background: var(--red);
+      border-color: var(--red);
+      color: #fff;
+    }
+
+    /* Scroll hint */
+    .scroll-hint {
+      position: absolute;
+      bottom: 2.4rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      color: rgba(245,240,232,0.35);
+      font-size: 0.55rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+    .scroll-hint .arrow {
+      width: 1px;
+      height: 40px;
+      background: rgba(245,240,232,0.25);
+      position: relative;
+      overflow: hidden;
+    }
+    .scroll-hint .arrow::after {
+      content: '';
+      position: absolute;
+      top: -40px; left: 0;
+      width: 1px; height: 40px;
+      background: rgba(245,240,232,0.7);
+      animation: slide-arrow 2s ease-in-out infinite;
+    }
+    @keyframes slide-arrow {
+      0%   { top: -40px; }
+      100% { top: 40px; }
+    }
+
+    /* ══════════════════════════
+       SOBRE NOSOTROS
+    ══════════════════════════ */
+    #sobre {
+      padding: clamp(80px, 12vw, 140px) clamp(1.5rem, 8vw, 6rem);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(3rem, 6vw, 8rem);
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .sobre-text { }
+    .sobre-text h2 { margin-bottom: 1.4rem; }
+    .sobre-text p {
+      font-size: 0.92rem;
+      color: var(--mid);
+      max-width: 44ch;
+      margin-bottom: 1.2rem;
+    }
+    .sobre-accent {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+    .sobre-accent .tag {
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      border: 1px solid var(--line);
+      padding: 0.35rem 0.9rem;
+      color: var(--mid);
+    }
+    .sobre-img {
+      aspect-ratio: 3/4;
+      background: #1A1A1A;
+      position: relative;
+      overflow: hidden;
+    }
+    .sobre-slide {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      opacity: 0;
+      animation: sobre-fade 15s infinite;
+    }
+    .sobre-slide:nth-child(1) { background-image: url('images/aboutme.jpeg');  animation-delay: 0s; }
+    .sobre-slide:nth-child(2) { background-image: url('images/aboutme2.jpeg'); animation-delay: 5s; }
+    .sobre-slide:nth-child(3) { background-image: url('images/aboutme3.jpeg'); animation-delay: 10s; }
+    @keyframes sobre-fade {
+      0%   { opacity: 0; }
+      4%   { opacity: 1; }
+      30%  { opacity: 1; }
+      37%  { opacity: 0; }
+      100% { opacity: 0; }
+    }
+    .sobre-img::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.05) 0%,
+        transparent 40%,
+        rgba(0,0,0,0.35) 100%
+      );
+      z-index: 2;
+    }
+    .sobre-img-frame {
+      position: absolute;
+      inset: 14px;
+      border: 1px solid rgba(255,255,255,0.22);
+      pointer-events: none;
+      z-index: 1;
+    }
+    .sobre-img .img-label {
+      position: absolute;
+      bottom: 1.4rem; left: 1.8rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.85);
+      letter-spacing: 0.12em;
+      z-index: 3;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+    }
+    @media (max-width: 780px) {
+      #sobre { grid-template-columns: 1fr; }
+      .sobre-img { max-height: 340px; }
+    }
+
+    /* ══════════════════════════
+       MENÚ
+    ══════════════════════════ */
+    #menu {
+      background: var(--charcoal);
+      padding: clamp(80px, 12vw, 140px) clamp(1.5rem, 8vw, 6rem);
+    }
+    .menu-header {
+      max-width: 1200px;
+      margin: 0 auto 4rem;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .menu-header h2 { color: var(--cream); }
+    .menu-header .section-label { color: rgba(245,240,232,0.4); }
+    .menu-header p {
+      font-size: 0.82rem;
+      color: rgba(245,240,232,0.45);
+      text-align: right;
+      max-width: 26ch;
+    }
+
+    .menu-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1px;
+    }
+
+    .menu-category {
+      border: 1px solid rgba(245,240,232,0.07);
+      border-top: 2px solid rgba(192,57,43,0.45);
+      padding: 2.2rem 1.8rem 2rem;
+      position: relative;
+      transition: border-top-color 0.25s, background 0.25s;
+    }
+    .menu-category:hover {
+      background: rgba(245,240,232,0.03);
+      border-top-color: var(--red);
+    }
+
+    .cat-number {
+      position: absolute;
+      top: 1.2rem; right: 1.4rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 4.5rem;
+      font-weight: 300;
+      color: rgba(245,240,232,0.04);
+      line-height: 1;
+      user-select: none;
+      letter-spacing: -0.04em;
+    }
+
+    .cat-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.35rem;
+      font-weight: 400;
+      font-style: italic;
+      color: var(--cream);
+      margin-bottom: 0.2rem;
+    }
+    .cat-jp {
+      font-size: 0.58rem;
+      letter-spacing: 0.18em;
+      color: var(--red);
+      opacity: 0.6;
+      margin-bottom: 0.6rem;
+      display: block;
+    }
+    .cat-price {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.85rem;
+      color: var(--sage);
+      letter-spacing: 0.05em;
+      margin-bottom: 1.3rem;
+      display: block;
+    }
+    .cat-note {
+      font-size: 0.72rem;
+      color: rgba(245,240,232,0.45);
+      line-height: 1.55;
+      margin-bottom: 1rem;
+      font-style: italic;
+    }
+
+    .menu-items { list-style: none; }
+    .menu-items li {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 0.55rem 0;
+      border-bottom: 1px solid rgba(245,240,232,0.06);
+      font-size: 0.85rem;
+      color: rgba(245,240,232,0.72);
+      gap: 1rem;
+    }
+    .menu-items li:last-child { border-bottom: none; }
+    .item-name { font-weight: 300; }
+    .item-sub {
+      font-size: 0.7rem;
+      color: rgba(245,240,232,0.35);
+      display: block;
+      margin-top: 0.1rem;
+    }
+    .item-price {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.9rem;
+      color: var(--sage);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* ══════════════════════════
+       GALERÍA
+    ══════════════════════════ */
+    #galeria {
+      padding: clamp(80px, 12vw, 140px) clamp(1.5rem, 8vw, 6rem);
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    #galeria .section-header {
+      margin-bottom: 3rem;
+    }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-auto-rows: 200px;
+      grid-auto-flow: dense;
+      gap: 10px;
+    }
+    .gallery-item {
+      overflow: hidden;
+      position: relative;
+      background: #1A1A1A;
+      cursor: pointer;
+    }
+    /* big hero tile */
+    .gallery-item:nth-child(1) { grid-column: span 2; grid-row: span 2; }
+    /* tall portrait */
+    .gallery-item:nth-child(3) { grid-row: span 2; }
+    /* wide landscape */
+    .gallery-item:nth-child(4) { grid-column: span 2; }
+    /* second hero tile */
+    .gallery-item:nth-child(6) { grid-column: span 2; grid-row: span 2; }
+    .gallery-item img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease, filter 0.4s ease;
+      filter: saturate(1.12) contrast(1.06) brightness(0.98);
+    }
+    .gallery-item:hover img {
+      transform: scale(1.04);
+      filter: saturate(1.25) contrast(1.1) brightness(1.02);
+    }
+    /* hover overlay */
+    .gallery-item::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(192,57,43,0);
+      transition: background 0.3s;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .gallery-item:hover::after {
+      background: rgba(192,57,43,0.1);
+    }
+    .gallery-item .gal-label {
+      position: absolute;
+      bottom: 0.9rem; left: 1rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.9);
+      z-index: 3;
+      letter-spacing: 0.06em;
+      text-shadow: 0 1px 6px rgba(0,0,0,0.7);
+    }
+    @media (max-width: 900px) {
+      .gallery-grid {
+        grid-template-columns: repeat(3, 1fr);
+        grid-auto-rows: 180px;
+      }
+      .gallery-item:nth-child(3) { grid-row: span 1; }
+    }
+    @media (max-width: 560px) {
+      .gallery-grid {
+        grid-template-columns: 1fr 1fr;
+        grid-auto-rows: 150px;
+      }
+      .gallery-item:nth-child(1),
+      .gallery-item:nth-child(6) { grid-column: span 2; grid-row: span 2; }
+      .gallery-item:nth-child(3),
+      .gallery-item:nth-child(4) { grid-column: span 1; grid-row: span 1; }
+    }
+
+    /* ══════════════════════════
+       RESEÑAS
+    ══════════════════════════ */
+    #resenas {
+      padding: clamp(80px, 12vw, 140px) clamp(1.5rem, 8vw, 6rem);
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .resenas-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 4rem;
+      flex-wrap: wrap;
+      gap: 2rem;
+    }
+    .resenas-header h2 {
+      font-size: clamp(2rem, 4.5vw, 3rem);
+    }
+    .resenas-header h2 em { font-style: italic; }
+    .rating-block {
+      text-align: right;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.4rem;
+    }
+    .rating-row {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .rating-score {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.4rem;
+      font-weight: 300;
+      color: var(--charcoal);
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+    .rating-stars {
+      display: flex;
+      gap: 2px;
+      color: var(--red);
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+    }
+    .rating-meta {
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--mid);
+    }
+
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    .review-card {
+      background: rgba(255,255,255,0.4);
+      border: 1px solid var(--line);
+      padding: 2rem 1.8rem;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      transition: border-color 0.25s, transform 0.25s;
+    }
+    .review-card:hover {
+      border-color: rgba(192,57,43,0.4);
+      transform: translateY(-3px);
+    }
+    .review-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3.5rem;
+      font-style: italic;
+      line-height: 0.6;
+      color: var(--red);
+      opacity: 0.4;
+      margin-bottom: 0.5rem;
+      user-select: none;
+    }
+    .review-stars {
+      display: flex;
+      gap: 2px;
+      color: var(--red);
+      font-size: 0.7rem;
+      margin-bottom: 1rem;
+      letter-spacing: 0.06em;
+    }
+    .review-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      font-style: italic;
+      font-weight: 400;
+      color: var(--charcoal);
+      line-height: 1.6;
+      margin-bottom: 1.6rem;
+      flex: 1;
+    }
+    .review-divider {
+      width: 32px;
+      height: 1px;
+      background: var(--line);
+      margin-bottom: 1rem;
+    }
+    .review-author {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .review-author-name {
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--charcoal);
+      font-weight: 500;
+    }
+    .review-date {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 0.72rem;
+      color: var(--mid);
+    }
+
+    .resenas-cta {
+      margin-top: 3rem;
+      text-align: center;
+    }
+    .resenas-cta a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.7rem;
+      font-size: 0.62rem;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--mid);
+      padding: 0.85rem 2rem;
+      border: 1px solid var(--line);
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .resenas-cta a:hover {
+      border-color: var(--red);
+      color: var(--red);
+    }
+    .resenas-cta a svg {
+      width: 12px; height: 12px; fill: currentColor;
+    }
+
+    @media (max-width: 900px) {
+      .reviews-grid { grid-template-columns: 1fr; gap: 1rem; }
+      .resenas-header { align-items: flex-start; }
+      .rating-block { text-align: left; align-items: flex-start; }
+    }
+
+    /* ══════════════════════════
+       CONTACTO
+    ══════════════════════════ */
+    #contacto {
+      background: var(--charcoal);
+      padding: clamp(80px, 12vw, 140px) clamp(1.5rem, 8vw, 6rem);
+    }
+    .contacto-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: clamp(3rem, 7vw, 8rem);
+    }
+    .contacto-info .section-label { color: rgba(245,240,232,0.4); }
+    .contacto-info h2 { color: var(--cream); margin-bottom: 2rem; }
+    .info-block {
+      margin-bottom: 1.8rem;
+    }
+    .info-block dt {
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-bottom: 0.35rem;
+    }
+    .info-block dd {
+      font-size: 0.88rem;
+      color: rgba(245,240,232,0.65);
+      line-height: 1.6;
+    }
+    .info-block dd a { transition: color 0.3s; }
+    .info-block dd a:hover { color: var(--cream); }
+
+    /* Map embed */
+    .map-embed {
+      width: 100%;
+      height: 220px;
+      margin-top: 2rem;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(245,240,232,0.1);
+      filter: grayscale(0.4) contrast(0.95) brightness(0.85);
+      transition: filter 0.3s;
+    }
+    .map-embed:hover { filter: grayscale(0) contrast(1) brightness(1); }
+    .map-embed iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+    }
+    .map-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-top: 1rem;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--sage);
+      transition: color 0.2s;
+    }
+    .map-link:hover { color: var(--cream); }
+    .map-link svg { width: 12px; height: 12px; fill: currentColor; }
+
+    /* Form */
+    .contacto-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.4rem;
+    }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; }
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .field label {
+      font-size: 0.6rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(245,240,232,0.4);
+    }
+    .field input, .field textarea {
+      background: rgba(245,240,232,0.04);
+      border: none;
+      border-bottom: 1px solid rgba(245,240,232,0.18);
+      padding: 0.75rem 0.4rem;
+      font-size: 0.85rem;
+      color: var(--cream);
+      outline: none;
+      transition: border-color 0.3s;
+      resize: none;
+    }
+    .field input:focus, .field textarea:focus {
+      border-bottom-color: var(--sage);
+    }
+    .field input::placeholder, .field textarea::placeholder {
+      color: rgba(245,240,232,0.2);
+    }
+    .btn-submit {
+      align-self: flex-start;
+      padding: 0.9rem 3rem;
+      background: transparent;
+      border: 1px solid rgba(245,240,232,0.3);
+      color: var(--cream);
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.3s, border-color 0.3s;
+    }
+    .btn-submit:hover { background: var(--red); border-color: var(--red); }
+    .form-note {
+      font-size: 0.7rem;
+      color: rgba(245,240,232,0.25);
+      margin-top: -0.6rem;
+    }
+    @media (max-width: 780px) {
+      .contacto-inner { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+
+    /* ══════════════════════════
+       FOOTER
+    ══════════════════════════ */
+    footer {
+      background: #111;
+      padding: 3.5rem clamp(1.5rem, 8vw, 6rem) 2.5rem;
+    }
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 2rem;
+    }
+    .footer-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      font-weight: 400;
+      font-style: italic;
+      color: var(--cream);
+    }
+    .footer-logo span {
+      display: block;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 0.55rem;
+      font-style: normal;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--mid);
+      margin-top: 0.2rem;
+    }
+    .footer-social {
+      display: flex;
+      gap: 1.2rem;
+    }
+    .social-link {
+      width: 36px; height: 36px;
+      border: 1px solid rgba(245,240,232,0.15);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(245,240,232,0.5);
+      transition: border-color 0.3s, color 0.3s;
+    }
+    .social-link:hover { border-color: var(--red); color: var(--red); }
+    .social-link svg { width: 14px; height: 14px; fill: currentColor; }
+
+    .footer-copy {
+      width: 100%;
+      text-align: center;
+      font-size: 0.62rem;
+      color: rgba(245,240,232,0.2);
+      letter-spacing: 0.12em;
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(245,240,232,0.06);
+    }
+
+    /* ══════════════════════════
+       BLOSSOM PETALS (canvas)
+    ══════════════════════════ */
+  </style>
+</head>
+<body>
+
+  <!-- ── NAV ── -->
+  <nav id="nav" role="navigation" aria-label="Main navigation">
+    <a href="#hero" class="nav-logo">Mr. Kiuri</a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="#sobre"   onclick="closeMenu()">Nosotros</a></li>
+      <li><a href="#menu"    onclick="closeMenu()">Menú</a></li>
+      <li><a href="#galeria" onclick="closeMenu()">Galería</a></li>
+      <li><a href="#resenas" onclick="closeMenu()">Reseñas</a></li>
+      <li><a href="#contacto" onclick="closeMenu()">Reservas</a></li>
+    </ul>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- ── HERO ── -->
+  <section id="hero" aria-label="Hero">
+    <canvas id="hero-canvas"></canvas>
+
+    <div class="hero-line-left"></div>
+    <div class="hero-line-right"></div>
+    <div class="hero-line-h top"></div>
+    <div class="hero-line-h bottom"></div>
+
+    <span class="hero-mark tl">Cusco · Peru</span>
+    <span class="hero-mark tr">Est. 2024</span>
+    <span class="hero-mark bl">Cocina Nikkei</span>
+    <span class="hero-mark br">和魂秘魂</span>
+
+    <div class="hero-center">
+      <div class="logo-ring">
+        <div class="logo-circle">
+          <div class="logo-chopsticks" aria-hidden="true">|  |</div>
+          <div class="logo-script">Mr. Kiuri</div>
+          <div class="logo-dot-row" aria-hidden="true">
+            <div class="ll"></div>
+            <div class="ld"></div>
+            <div class="ll"></div>
+          </div>
+          <div class="logo-sub">Cocina Nikkei</div>
+        </div>
+      </div>
+      <div class="hero-headline">
+        <span class="hero-sub-label">Cusco · Perú · Est. 2024</span>
+        <p class="hero-tagline">Alma <em>japonesa</em> · Corazón <em>andino</em></p>
+      </div>
+      <a href="#menu" class="btn-primary">Ver Menú</a>
+    </div>
+
+    <div class="scroll-hint" aria-hidden="true">
+      <div class="arrow"></div>
+      <span>Scroll</span>
+    </div>
+  </section>
+
+  <!-- ── SOBRE NOSOTROS ── -->
+  <section id="sobre" aria-labelledby="sobre-heading">
+    <div class="sobre-text">
+      <span class="section-label reveal">Nuestra Historia</span>
+      <h2 id="sobre-heading" class="reveal reveal-delay-1">Donde el Pacífico<br><em>encuentra los Andes</em></h2>
+      <div class="rule reveal reveal-delay-2"><div class="dot"></div></div>
+      <p class="reveal reveal-delay-2">
+        La cocina Nikkei nació del encuentro entre los inmigrantes japoneses y la riqueza culinaria del Perú. En Mr. Kiuri, honramos ese legado: técnicas milenarias del Japón aplicadas a los ingredientes más auténticos de los Andes y el Pacífico.
+      </p>
+      <p class="reveal reveal-delay-3">
+        Cada plato es un diálogo entre el <em>umami</em> nipón y el sabor profundo del suelo cusqueño — equilibrio, precisión y alma en cada bocado.
+      </p>
+      <div class="sobre-accent reveal reveal-delay-4">
+        <span class="tag">Omakase</span>
+        <span class="tag">Fusión</span>
+        <span class="tag">Km 0</span>
+      </div>
+    </div>
+    <div class="sobre-img reveal reveal-delay-3" role="img" aria-label="Imágenes del restaurante Mr. Kiuri">
+      <div class="sobre-slide"></div>
+      <div class="sobre-slide"></div>
+      <div class="sobre-slide"></div>
+      <div class="sobre-img-frame" aria-hidden="true"></div>
+      <span class="img-label">Cocina · Cusco</span>
+    </div>
+  </section>
+
+  <!-- ── MENÚ ── -->
+  <section id="menu" aria-labelledby="menu-heading">
+    <div class="menu-header">
+      <div>
+        <span class="section-label reveal">La Carta</span>
+        <h2 id="menu-heading" class="reveal reveal-delay-1" style="color:var(--cream);">Menú</h2>
+      </div>
+      <p class="reveal reveal-delay-2">Ingredientes de temporada.<br>Precios en soles peruanos (S/).</p>
+    </div>
+
+    <div class="menu-grid">
+
+      <!-- 01 Sushi Tapas -->
+      <div class="menu-category reveal">
+        <span class="cat-number">01</span>
+        <h3 class="cat-title">Sushi Tapas</h3>
+        <span class="cat-jp">寿司・タパス</span>
+        <span class="cat-price">S/ 17</span>
+        <ul class="menu-items">
+          <li>
+            <div>
+              <span class="item-name">Sesame Maguro</span>
+              <span class="item-sub">Tartare de atún con salsa ponzu, ajonjolí, kiuri y wantán fritos al hilo.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="item-name">TNT de Sakana</span>
+              <span class="item-sub">Tartare de pesca blanca en TNT, palta y toques de wantán frito al hilo.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="item-name">Trucha Cream</span>
+              <span class="item-sub">Tartare de trucha con wantán fritos al hilo.</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- 02 Temaki -->
+      <div class="menu-category reveal reveal-delay-1">
+        <span class="cat-number">02</span>
+        <h3 class="cat-title">Temaki</h3>
+        <span class="cat-jp">手巻き</span>
+        <span class="cat-price">S/ 15</span>
+        <ul class="menu-items">
+          <li>
+            <div>
+              <span class="item-name">Trucha Batayaki</span>
+              <span class="item-sub">Mantequilla japonesa, palta, limón y trucha.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="item-name">Trucha Kimchi</span>
+              <span class="item-sub">Salmón, palta, crema de ajos picantes.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="item-name">Maguro Black</span>
+              <span class="item-sub">Atún, palta, tartar de hongos.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="item-name">Temaki Batayaki</span>
+              <span class="item-sub">Tartare de pesca blanca y palta.</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- 03 Nigiris -->
+      <div class="menu-category reveal reveal-delay-2">
+        <span class="cat-number">03</span>
+        <h3 class="cat-title">Nigiris</h3>
+        <span class="cat-jp">握り</span>
+        <span class="cat-price">2 uni · S/ 15</span>
+        <ul class="menu-items">
+          <li>
+            <div>
+              <span class="item-name">Trucha Truffle</span>
+              <span class="item-sub">Panza de trucha, mantequilla trufada y queso parmesano.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="item-name">Buri y Miso</span>
+              <span class="item-sub">Pesca blanca, mantequilla de miso, honey mustard.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="item-name">Nigiri Foie</span>
+              <span class="item-sub">Pesca blanca, tartufo, aceite de culantro y foie de tuétano.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="item-name">Nigiri Aburi</span>
+              <span class="item-sub">Pesca blanca, mantequilla japonesa y salsa tare.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="item-name">Trucha Kimchi</span>
+              <span class="item-sub">Salmón, tartufo y salsa de kimchi.</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- 04 Makis -->
+      <div class="menu-category reveal">
+        <span class="cat-number">04</span>
+        <h3 class="cat-title">Makis</h3>
+        <span class="cat-jp">巻き寿司</span>
+        <span class="cat-price">5 uni · S/ 14   ·   10 uni · S/ 22</span>
+        <ul class="menu-items">
+          <li>
+            <div>
+              <span class="item-name">Maki Parrillero</span>
+              <span class="item-sub">Trucha flameada con salsa chimichurri, rellena de palta y langostinos furai.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="item-name">Mr. Kiuri</span>
+              <span class="item-sub">Kiuri, langostinos furai, pesca blanca, bañado en salsa de miel de ají limo.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="item-name">Nikkei</span>
+              <span class="item-sub">Palta, langostino furai, tartare de atún nikkei con kiuri y koshuro.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="item-name">Furai</span>
+              <span class="item-sub">Palta, trucha, queso crema y salsa tare.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="item-name">Acevichada</span>
+              <span class="item-sub">Palta, langostinos furai, ají limo deshidratado en salsa acevichada.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="item-name">Volcán</span>
+              <span class="item-sub">Trucha, langostinos furai, palta y salsa spicy.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="item-name">Pirámide</span>
+              <span class="item-sub">Langostino furai, palta, salsa de rocoto y pesca blanca.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="item-name">Parma</span>
+              <span class="item-sub">Pesca blanca, langostino furai, palta, mantequilla japonesa y salsa tare.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="item-name">Vegetariano</span>
+              <span class="item-sub">Palta, pepino, verdura fresca.</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- 05 Poke Bowl -->
+      <div class="menu-category reveal reveal-delay-1">
+        <span class="cat-number">05</span>
+        <h3 class="cat-title">Poke Bowl</h3>
+        <span class="cat-jp">ポケ丼</span>
+        <span class="cat-price">S/ 25</span>
+        <ul class="menu-items">
+          <li>
+            <div>
+              <span class="item-name">Poke Trucha</span>
+              <span class="item-sub">Shari, verduras, tartare de trucha, furikake, salsa acevichada y salsa ponzu.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="item-name">Ebi Poke</span>
+              <span class="item-sub">Shari, verduras, salsa acevichada, furikake, langostinos fritos y frescos.</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- 06 Calientes -->
+      <div class="menu-category reveal reveal-delay-2">
+        <span class="cat-number">06</span>
+        <h3 class="cat-title">Calientes</h3>
+        <span class="cat-jp">温物</span>
+        <span class="cat-price">S/ 25</span>
+        <ul class="menu-items">
+          <li>
+            <div>
+              <span class="item-name">Buta Ramen</span>
+              <span class="item-sub">Panceta de cerdo, huevo pochado, shiitake, verduras, alga nori y fideo tipo soba.</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- 07 Moriawase -->
+      <div class="menu-category reveal">
+        <span class="cat-number">07</span>
+        <h3 class="cat-title">Moriawase</h3>
+        <span class="cat-jp">盛り合わせ</span>
+        <p class="cat-note">Combos para compartir.</p>
+        <ul class="menu-items">
+          <li>
+            <div>
+              <span class="item-name">20 Makis</span>
+              <span class="item-sub">Selección variada</span>
+            </div>
+            <span class="item-price">S/ 40</span>
+          </li>
+          <li>
+            <div>
+              <span class="item-name">30 Makis</span>
+              <span class="item-sub">Selección variada</span>
+            </div>
+            <span class="item-price">S/ 55</span>
+          </li>
+          <li>
+            <div>
+              <span class="item-name">40 Makis</span>
+              <span class="item-sub">Selección variada</span>
+            </div>
+            <span class="item-price">S/ 70</span>
+          </li>
+          <li>
+            <div>
+              <span class="item-name">Mixto A</span>
+              <span class="item-sub">10 makis · 2 nigiris · 1 temaki</span>
+            </div>
+            <span class="item-price">S/ 45</span>
+          </li>
+          <li>
+            <div>
+              <span class="item-name">Mixto B</span>
+              <span class="item-sub">20 makis · 4 nigiris · 2 temakis</span>
+            </div>
+            <span class="item-price">S/ 75</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- 08 Calientitos -->
+      <div class="menu-category reveal reveal-delay-1">
+        <span class="cat-number">08</span>
+        <h3 class="cat-title">Calientitos</h3>
+        <span class="cat-jp">温かい飲み物</span>
+        <span class="cat-price">S/ 15</span>
+        <p class="cat-note">Infusión de hierbas aromáticas con la fruta de tu elección.</p>
+        <ul class="menu-items">
+          <li><div><span class="item-name">Frutos rojos</span></div></li>
+          <li><div><span class="item-name">Maracuyá</span></div></li>
+          <li><div><span class="item-name">Mango</span></div></li>
+          <li><div><span class="item-name">Fresas</span></div></li>
+          <li><div><span class="item-name">Arándanos</span></div></li>
+        </ul>
+      </div>
+
+      <!-- 09 Té Piteados -->
+      <div class="menu-category reveal reveal-delay-2">
+        <span class="cat-number">09</span>
+        <h3 class="cat-title">Té Piteados</h3>
+        <span class="cat-jp">スパイクティー</span>
+        <span class="cat-price">S/ 22</span>
+        <p class="cat-note">Infusión de hierbas y té preparada con alcohol y la fruta de tu elección.</p>
+        <ul class="menu-items">
+          <li><div><span class="item-name">Maracuyá</span></div></li>
+          <li><div><span class="item-name">Mango</span></div></li>
+          <li><div><span class="item-name">Fresas</span></div></li>
+          <li><div><span class="item-name">Arándanos</span></div></li>
+          <li><div><span class="item-name">Frutos rojos</span></div></li>
+        </ul>
+      </div>
+
+      <!-- 10 Aguas y Gaseosas -->
+      <div class="menu-category reveal">
+        <span class="cat-number">10</span>
+        <h3 class="cat-title">Aguas y Gaseosas</h3>
+        <span class="cat-jp">飲み物</span>
+        <span class="cat-price">S/ 3</span>
+        <ul class="menu-items">
+          <li><div><span class="item-name">Coca-Cola</span></div></li>
+          <li><div><span class="item-name">Inca Kola</span></div></li>
+          <li><div><span class="item-name">Agua con gas</span></div></li>
+          <li><div><span class="item-name">Agua sin gas</span></div></li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── GALERÍA ── -->
+  <section id="galeria" aria-labelledby="galeria-heading">
+    <div class="section-header">
+      <span class="section-label reveal">Imágenes</span>
+      <h2 id="galeria-heading" class="reveal reveal-delay-1">Galería</h2>
+      <div class="rule reveal reveal-delay-2"><div class="dot"></div></div>
+    </div>
+    <div class="gallery-grid">
+      <div class="gallery-item reveal">
+        <img src="images/IMG_2139.jpeg" alt="Foto del restaurante 1" loading="lazy" />
+        <span class="gal-label">Ambiente</span>
+      </div>
+      <div class="gallery-item reveal reveal-delay-1">
+        <img src="images/IMG_2211.jpeg" alt="Foto del restaurante 2" loading="lazy" />
+        <span class="gal-label">Sabor</span>
+      </div>
+      <div class="gallery-item reveal reveal-delay-2">
+        <img src="images/IMG_2514.jpeg" alt="Foto del restaurante 3" loading="lazy" />
+        <span class="gal-label">Detalle</span>
+      </div>
+      <div class="gallery-item reveal reveal-delay-3">
+        <img src="images/IMG_2900.jpeg" alt="Foto del restaurante 4" loading="lazy" />
+        <span class="gal-label">Plato</span>
+      </div>
+      <div class="gallery-item reveal reveal-delay-1">
+        <img src="images/IMG_3070.jpeg" alt="Foto del restaurante 5" loading="lazy" />
+        <span class="gal-label">Cocina</span>
+      </div>
+      <div class="gallery-item reveal reveal-delay-2">
+        <img src="images/IMG_2262.jpeg" alt="Foto del restaurante 6" loading="lazy" />
+        <span class="gal-label">Nikkei</span>
+      </div>
+      <div class="gallery-item reveal reveal-delay-3">
+        <img src="images/IMG_2218.jpeg" alt="Foto del restaurante 7" loading="lazy" />
+        <span class="gal-label">Mesa</span>
+      </div>
+      <div class="gallery-item reveal reveal-delay-1">
+        <img src="images/IMG_3067.jpeg" alt="Foto del restaurante 8" loading="lazy" />
+        <span class="gal-label">Sushi</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── RESEÑAS ── -->
+  <section id="resenas" aria-labelledby="resenas-heading">
+    <div class="resenas-header">
+      <div>
+        <span class="section-label reveal">Lo que dicen</span>
+        <h2 id="resenas-heading" class="reveal reveal-delay-1">Reseñas <em>de huéspedes</em></h2>
+      </div>
+      <div class="rating-block reveal reveal-delay-2">
+        <div class="rating-row">
+          <span class="rating-score">4.9</span>
+          <div>
+            <div class="rating-stars" aria-label="4.9 de 5 estrellas">★★★★★</div>
+            <span class="rating-meta">en Google Maps</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="reviews-grid">
+      <article class="review-card reveal">
+        <div class="review-quote" aria-hidden="true">“</div>
+        <div class="review-stars" aria-label="5 estrellas">★★★★★</div>
+        <p class="review-text">¡Qué grata sorpresa este nuevo lugar en Larapa! El barrio realmente lo necesitaba. Todo estaba delicioso e increíblemente fresco — pero lo que más valoré fue la atención del chef Itamae.</p>
+        <div class="review-divider"></div>
+        <div class="review-author">
+          <span class="review-author-name">Gloria Jove</span>
+          <span class="review-date">Hace 3 meses</span>
+        </div>
+      </article>
+
+      <article class="review-card reveal reveal-delay-1">
+        <div class="review-quote" aria-hidden="true">“</div>
+        <div class="review-stars" aria-label="5 estrellas">★★★★★</div>
+        <p class="review-text">Excelente atención del chef. Probamos los makis a la parrilla (1000/10). Nos invitaron también temaris con pepino en salsa, igual de deliciosos. ¡Muy recomendado!</p>
+        <div class="review-divider"></div>
+        <div class="review-author">
+          <span class="review-author-name">Shadow Ochoa</span>
+          <span class="review-date">Hace una semana</span>
+        </div>
+      </article>
+
+      <article class="review-card reveal reveal-delay-2">
+        <div class="review-quote" aria-hidden="true">“</div>
+        <div class="review-stars" aria-label="5 estrellas">★★★★★</div>
+        <p class="review-text">Un lugar muy tranquilo, los ingredientes son frescos y el sabor es 10/10. Pedí un poké bowl de trucha, delicioso, igual que los makis. ¡Muy recomendado!</p>
+        <div class="review-divider"></div>
+        <div class="review-author">
+          <span class="review-author-name">Angelus</span>
+          <span class="review-date">Hace 2 meses</span>
+        </div>
+      </article>
+    </div>
+
+    <div class="resenas-cta reveal reveal-delay-3">
+      <a href="https://www.google.com/maps/search/?api=1&query=Mr.+Kiuri+Av.+Las+Flores+39-C,+Urb.+Ingenier%C3%ADa+Larapa+Grande,+Cusco+08004"
+         target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+        Ver todas las reseñas
+      </a>
+    </div>
+  </section>
+
+  <!-- ── CONTACTO ── -->
+  <section id="contacto" aria-labelledby="contacto-heading">
+    <div class="contacto-inner">
+
+      <div class="contacto-info">
+        <span class="section-label reveal">Visítanos</span>
+        <h2 id="contacto-heading" class="reveal reveal-delay-1">Reservas &amp;<br>Contacto</h2>
+        <div class="rule reveal reveal-delay-2" style="border-color:rgba(245,240,232,0.1)"><div class="dot"></div></div>
+
+        <dl>
+          <div class="info-block reveal reveal-delay-2">
+            <dt>Dirección</dt>
+            <dd>Urb. Ingeniería Larapa Grande<br>Av. Las Flores 39-C<br>Cusco 08004, Perú</dd>
+          </div>
+          <div class="info-block reveal reveal-delay-3">
+            <dt>Teléfono</dt>
+            <dd><a href="tel:+51984000000">+51 984 000 000</a></dd>
+          </div>
+          <div class="info-block reveal reveal-delay-4">
+            <dt>Horario</dt>
+            <dd>Martes – Domingo<br>12:00 – 22:00 hrs</dd>
+          </div>
+        </dl>
+
+        <div class="map-embed reveal reveal-delay-3" aria-label="Mapa — Av. Las Flores 39-C, Larapa Grande, Cusco">
+          <iframe
+            src="https://www.google.com/maps?q=Mr.+Kiuri+Av.+Las+Flores+39-C,+Urb.+Ingenier%C3%ADa+Larapa+Grande,+Cusco+08004&output=embed"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            title="Ubicación Mr. Kiuri"></iframe>
+        </div>
+        <a class="map-link reveal reveal-delay-4"
+           href="https://www.google.com/maps/search/?api=1&query=Mr.+Kiuri+Av.+Las+Flores+39-C,+Urb.+Ingenier%C3%ADa+Larapa+Grande,+Cusco+08004"
+           target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+          Cómo llegar
+        </a>
+      </div>
+
+      <form class="contacto-form reveal reveal-delay-2" aria-label="Formulario de contacto" onsubmit="handleForm(event)">
+        <div class="form-row">
+          <div class="field">
+            <label for="name">Nombre</label>
+            <input type="text" id="name" name="name" placeholder="Tu nombre" required />
+          </div>
+          <div class="field">
+            <label for="email">Correo</label>
+            <input type="email" id="email" name="email" placeholder="tu@correo.com" required />
+          </div>
+        </div>
+        <div class="field">
+          <label for="phone">Teléfono (opcional)</label>
+          <input type="tel" id="phone" name="phone" placeholder="+51 ..." />
+        </div>
+        <div class="field">
+          <label for="message">Mensaje o reserva</label>
+          <textarea id="message" name="message" rows="5" placeholder="Fecha, hora, número de personas…" required></textarea>
+        </div>
+        <p class="form-note">Respondemos dentro de 24 horas.</p>
+        <button type="submit" class="btn-submit" id="submit-btn">Enviar mensaje</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-logo">
+        Mr. Kiuri
+        <span>Cocina Nikkei · Cusco</span>
+      </div>
+      <div class="footer-social" aria-label="Redes sociales">
+        <!-- Instagram -->
+        <a href="#" class="social-link" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        </a>
+        <!-- Facebook -->
+        <a href="#" class="social-link" aria-label="Facebook">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        </a>
+      </div>
+    </div>
+    <p class="footer-copy">© 2024 Mr. Kiuri — Cocina Nikkei · Cusco, Perú · Todos los derechos reservados</p>
+  </footer>
+
+  <script>
+    // ── NAV scroll ──
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 60);
+    }, { passive: true });
+
+    // ── Mobile menu ──
+    const toggle = document.getElementById('nav-toggle');
+    const links  = document.getElementById('nav-links');
+    toggle.addEventListener('click', () => {
+      const open = links.classList.toggle('open');
+      toggle.classList.toggle('open', open);
+      toggle.setAttribute('aria-expanded', open);
+      document.body.style.overflow = open ? 'hidden' : '';
+    });
+    function closeMenu() {
+      links.classList.remove('open');
+      toggle.classList.remove('open');
+      toggle.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    }
+
+    // ── Intersection Observer ──
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // ── Canvas: falling ink petals ──
+    (function() {
+      const canvas = document.getElementById('hero-canvas');
+      const ctx    = canvas.getContext('2d');
+      let W, H, petals = [];
+
+      function resize() {
+        W = canvas.width  = canvas.offsetWidth;
+        H = canvas.height = canvas.offsetHeight;
+      }
+      resize();
+      window.addEventListener('resize', resize, { passive: true });
+
+      function rnd(a, b) { return a + Math.random() * (b - a); }
+
+      // Petal shapes: small organic blobs
+      class Petal {
+        constructor() { this.reset(true); }
+        reset(init) {
+          this.x  = rnd(0, W);
+          this.y  = init ? rnd(-H, H) : rnd(-80, -10);
+          this.r  = rnd(3, 7);
+          this.vx = rnd(-0.35, 0.35);
+          this.vy = rnd(0.4, 1.1);
+          this.rot  = rnd(0, Math.PI * 2);
+          this.drot = rnd(-0.015, 0.015);
+          this.alpha = rnd(0.06, 0.22);
+          // alternate: petal (0) or ink dot (1)
+          this.type  = Math.random() < 0.5 ? 0 : 1;
+          // soft pink or white
+          this.hue = Math.random() < 0.6 ? '255,220,220' : '245,240,232';
+        }
+        update() {
+          this.x   += this.vx;
+          this.y   += this.vy;
+          this.rot += this.drot;
+          if (this.y > H + 20) this.reset(false);
+        }
+        draw() {
+          ctx.save();
+          ctx.translate(this.x, this.y);
+          ctx.rotate(this.rot);
+          ctx.globalAlpha = this.alpha;
+          ctx.fillStyle = `rgb(${this.hue})`;
+          if (this.type === 1) {
+            // ink dot
+            ctx.beginPath();
+            ctx.arc(0, 0, this.r, 0, Math.PI * 2);
+            ctx.fill();
+          } else {
+            // petal: two arcs forming a leaf shape
+            ctx.beginPath();
+            ctx.ellipse(0, 0, this.r, this.r * 2.2, 0, 0, Math.PI * 2);
+            ctx.fill();
+          }
+          ctx.restore();
+        }
+      }
+
+      for (let i = 0; i < 55; i++) petals.push(new Petal());
+
+      function frame() {
+        ctx.clearRect(0, 0, W, H);
+        petals.forEach(p => { p.update(); p.draw(); });
+        requestAnimationFrame(frame);
+      }
+      frame();
+    })();
+
+    // ── Form submit ──
+    function handleForm(e) {
+      e.preventDefault();
+      const btn = document.getElementById('submit-btn');
+      btn.textContent = 'Mensaje enviado ✓';
+      btn.disabled = true;
+      btn.style.borderColor = 'var(--sage)';
+      btn.style.color = 'var(--sage)';
+      setTimeout(() => {
+        btn.textContent = 'Enviar mensaje';
+        btn.disabled = false;
+        btn.style.borderColor = '';
+        btn.style.color = '';
+        e.target.reset();
+      }, 3500);
+    }
+  </script>
+</body>
+</html>
